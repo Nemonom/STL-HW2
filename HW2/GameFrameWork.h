@@ -19,6 +19,8 @@ public:
 
 	void Mouse_Event(UINT iMessage, WPARAM wParam, LPARAM lParam);
 
+	void Menu_Input(WPARAM wparam);
+
 	bool Destroy();
 	
 	void Init();

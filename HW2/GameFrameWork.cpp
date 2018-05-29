@@ -2,6 +2,9 @@
 
 #include "header.h"
 #include "GameFrameWork.h"
+#include "resource1.h"
+#include "Sound.h"
+
 
 CGameFrameWork::CGameFrameWork()
 {
@@ -37,9 +40,10 @@ void CGameFrameWork::Key_Event(UINT iMessage, WPARAM wParam)
 
 void CGameFrameWork::Key_Down(WPARAM wParam)
 {
-	switch (wParam)
-	{
-	}
+	//switch (wParam)
+	//{
+	//
+	//}
 }
 
 void CGameFrameWork::Key_Up(WPARAM wParam)
@@ -57,9 +61,18 @@ void CGameFrameWork::Mouse_Event(UINT iMessage, WPARAM wParam, LPARAM lParam)
 
 }
 
+void CGameFrameWork::Menu_Input(WPARAM wparam)
+{	
+	switch (LOWORD(wparam))
+	{
+
+
+	}
+}
+
 bool CGameFrameWork::Destroy()
 {
-
+	return false;
 }
 
 void CGameFrameWork::Init()

@@ -16,6 +16,12 @@
     <Filter Include="CGameFramework">
       <UniqueIdentifier>{688568fc-f07e-482a-9c3b-fca04dc7aab8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="CSound">
+      <UniqueIdentifier>{5817e0e9-2ce0-4572-9793-b9e704694890}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CGameObject">
+      <UniqueIdentifier>{bab891ea-b328-4506-9d90-71d78504639e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="header.h">
@@ -33,6 +39,18 @@
     <ClInclude Include="GameFrameWork.h">
       <Filter>CGameFramework</Filter>
     </ClInclude>
+    <ClInclude Include="Sound.h">
+      <Filter>CSound</Filter>
+    </ClInclude>
+    <ClInclude Include="BitmapObject.h">
+      <Filter>CGameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>CGameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="resource1.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HW2.cpp">
@@ -41,9 +59,21 @@
     <ClCompile Include="GameFrameWork.cpp">
       <Filter>CGameFramework</Filter>
     </ClCompile>
+    <ClCompile Include="Sound.cpp">
+      <Filter>CSound</Filter>
+    </ClCompile>
+    <ClCompile Include="BitmapObject.cpp">
+      <Filter>CGameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>CGameObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="HW2.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="Resource.rc">
       <Filter>리소스 파일</Filter>
     </ResourceCompile>
   </ItemGroup>
