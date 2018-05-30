@@ -1,5 +1,6 @@
 #include "header.h"
 #include "GameObject.h"
+#include "BitmapObject.h"
 
 
 CGameObject::CGameObject() :m_fsizerate(1.f)

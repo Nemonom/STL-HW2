@@ -11,9 +11,33 @@ protected:
 
 	COLORREF m_delRGB;
 	bool m_isBMP;
+
+	bool m_on;
+	bool m_click;
+
 public:
 	CBitmapObject();
 	~CBitmapObject();
+
+
+	void SetOn(bool q) {
+		m_on = q;
+
+		if (m_on) {
+			Setsizerate(1.2f);
+		}
+		else {
+			Setsizerate(1.0f);
+
+		}
+	}
+	void SetClick() {
+		m_click = m_click ? false : true;
+	}
+	bool GetClick() {
+		return m_click;
+	}
+	void SetMouseMove(const POINT & mouse);
 
 	void releaseCimg() {
 		m_cimg.Destroy();

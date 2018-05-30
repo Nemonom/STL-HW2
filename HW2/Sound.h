@@ -15,12 +15,11 @@ public:
 
 public:
 	System * pSystem;
-	Sound * pSound[SOUND_NUM];
-	Channel * pChannel[2];
+	Sound * pSound[NUM];
+	Channel * pChannel[NUM];
 
 	void Add_sound();
-	void Play_bgm(ENUM_SOUND type);
-	void Play_effect(ENUM_SOUND type);
-	void Stop_bgm(ENUM_SOUND type);
+	void Play_bgm(int type);
+	void Stop_bgm(int type);
 };
 

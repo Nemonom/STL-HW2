@@ -6,6 +6,8 @@ CBitmapObject::CBitmapObject()
 {
 	m_delRGB = RGB(255, 0, 255);
 	m_isBMP = false;
+	m_on = false;
+	m_click = false;
 }
 
 
@@ -13,6 +15,17 @@ CBitmapObject::~CBitmapObject()
 {
 	m_cimg.Destroy();//명시적해제
 }
+
+void CBitmapObject::SetMouseMove(const POINT & mouse)
+{
+	RECT tmp = GetObjRECT();
+	SetOn(false);
+
+	if (PtInRect(&tmp, mouse)) {
+		SetOn(true);
+	}
+}
+
 
 void CBitmapObject::drawalpha(HDC hdc, BYTE ifalpha)
 {
@@ -47,8 +60,6 @@ void CBitmapObject::draw(HDC hdc, RECT rectDest)
 		m_cimg.Draw(hdc, rectDest);
 	}
 }
-
-
 
 
 void CBitmapObject::draw(HDC hdc,RECT rectDest, float fradian)

@@ -1,5 +1,21 @@
 #pragma once
 #include <Windows.h>
+#include <vector>
+#include <list>
+#include "BitmapObject.h"
+#include "Sound.h"
+
+class Key
+{
+	int x;
+	int y;
+	float ftime;
+
+public:
+	Key() {};
+	Key(int x, int y, float ftime) : x(x), y(y), ftime(ftime) {};
+	~Key() {};
+};
 
 class CGameFrameWork
 {
@@ -28,6 +44,17 @@ public:
 private:
 	HWND m_hWnd;
 	HINSTANCE m_hInstance;
-		
+
+	Sound_Func snd;
+
+	CBitmapObject m_back;
+	std::vector<CBitmapObject> m_obj; // 누르는거
+	std::list<Key> m_key; // 연주할 데이터
+
+	// 시간 측정
+	float m_time{ 0.0f };
+
+	bool m_playstart = false;
+	bool m_recordstart = false;
 };
 

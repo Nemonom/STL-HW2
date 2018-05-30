@@ -6,7 +6,7 @@ Sound_Func::Sound_Func()
 {
 	FMOD::System_Create(&pSystem);
 	pSystem->init(
-		FMOD_MAX_CHANNEL_WIDTH
+		NUM
 		, FMOD_INIT_NORMAL
 		, nullptr
 	);
@@ -17,11 +17,10 @@ Sound_Func::Sound_Func()
 
 Sound_Func::~Sound_Func()
 {
-	for (int i = 0; i < SOUND_NUM; ++i)
+	for (int i = 0; i < NUM; ++i)
 	{
 		pSound[i]->release();
 	}
-
 
 
 	pSystem->release();
@@ -31,40 +30,55 @@ Sound_Func::~Sound_Func()
 
 void Sound_Func::Add_sound()
 {
-	pSystem->createSound(
-		"Sound/VIOLA_SKILL1.mp3"
-		, FMOD_DEFAULT | FMOD_LOOP_OFF
-		, nullptr
-		, &pSound[(int)ENUM_SOUND::TEST]
-	);
-
-	
 	pSystem->createStream(
-		"Sound/Fez - Adventure.mp3"
-		, FMOD_LOOP_NORMAL | FMOD_2D
+		"Sound/Back.MP3"
+		, FMOD_DEFAULT | FMOD_LOOP_NORMAL
 		, nullptr
-		, &pSound[(int)ENUM_SOUND::BACK1]
+		, &pSound[0]
+	);
+	pSystem->createStream(
+		"Sound/no money.mp3"
+		, FMOD_DEFAULT | FMOD_LOOP_NORMAL
+		, nullptr
+		, &pSound[1]
+	);
+	pSystem->createStream(
+		"Sound/stage up.mp3"
+		, FMOD_DEFAULT | FMOD_LOOP_NORMAL
+		, nullptr
+		, &pSound[2]
+	);
+	pSystem->createStream(
+		"Sound/tesla sound.mp3"
+		, FMOD_DEFAULT | FMOD_LOOP_NORMAL
+		, nullptr
+		, &pSound[3]
+	);
+	pSystem->createStream(
+		"Sound/VIOLA_SKILL1.mp3"
+		, FMOD_DEFAULT | FMOD_LOOP_NORMAL
+		, nullptr
+		, &pSound[4]
+	);
+	pSystem->createStream(
+		"Sound/VIOLA_SKILL2.mp3"
+		, FMOD_DEFAULT | FMOD_LOOP_NORMAL
+		, nullptr
+		, &pSound[5]
 	);
 	
 }
 
-void Sound_Func::Play_bgm(ENUM_SOUND type)
+void Sound_Func::Play_bgm(int type)
 {
-	pSystem->playSound(pSound[(int)type]
-		, nullptr, false, &pChannel[0]);
+	pSystem->playSound(pSound[type]
+		, nullptr, false, &pChannel[type]);
 }
 
-void Sound_Func::Play_effect(ENUM_SOUND type)
-{
-	pSystem->update();
-	pSystem->playSound(pSound[(int)type]
-		, nullptr, false, &pChannel[1]);
-}
-
-void Sound_Func::Stop_bgm(ENUM_SOUND type)
+void Sound_Func::Stop_bgm(int type)
 {
 	bool bPlaying;
-	pChannel[0]->isPlaying(&bPlaying);
+	pChannel[type]->isPlaying(&bPlaying);
 	if (bPlaying)
-		pChannel[0]->stop();
+		pChannel[type]->stop();
 }

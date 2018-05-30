@@ -22,6 +22,9 @@
     <Filter Include="CGameObject">
       <UniqueIdentifier>{bab891ea-b328-4506-9d90-71d78504639e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="rtc">
+      <UniqueIdentifier>{d7014a31-f62d-4cce-a819-5ded713068a3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="header.h">
@@ -51,6 +54,12 @@
     <ClInclude Include="resource1.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="operator.h">
+      <Filter>rtc</Filter>
+    </ClInclude>
+    <ClInclude Include="Point.h">
+      <Filter>rtc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HW2.cpp">
@@ -67,6 +76,12 @@
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
       <Filter>CGameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="operator.cpp">
+      <Filter>rtc</Filter>
+    </ClCompile>
+    <ClCompile Include="Point.cpp">
+      <Filter>rtc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
