@@ -7,6 +7,7 @@
 
 class Key
 {
+public:
 	int x;
 	int y;
 	float ftime;
@@ -14,7 +15,13 @@ class Key
 public:
 	Key() {};
 	Key(int x, int y, float ftime) : x(x), y(y), ftime(ftime) {};
+	Key(const Key& other) : x(other.x), y(other.y), ftime(other.ftime) {};
 	~Key() {};
+
+	void show() const 
+	{
+		std::cout << x << " " << y << " " << ftime << std::endl;
+	}
 };
 
 class CGameFrameWork
@@ -54,7 +61,6 @@ private:
 	// 시간 측정
 	float m_time{ 0.0f };
 
-	bool m_playstart = false;
-	bool m_recordstart = false;
+	state m_gamestate = state::Normal;
 };
 

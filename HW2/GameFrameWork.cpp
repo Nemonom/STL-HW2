@@ -60,6 +60,45 @@ void CGameFrameWork::Render(HDC hdc)
 
 void CGameFrameWork::Update(const float & frame_time)
 {
+	switch (m_gamestate)
+	{
+	case state::Normal:
+
+		break;
+
+	case state::PlayRecord:
+		m_time += frame_time;
+
+		if (m_time > frame_time * 60 * 10)
+		{
+			m_gamestate = state::Normal;
+			m_time = 0.0f;
+		}
+		break;
+
+	case state::StartRecord:
+		m_time += frame_time;
+
+		if (m_time > frame_time * 60 * 5)
+		{
+			// 파일에 저장하기
+			std::ofstream out("replay.txt", std::ios::binary);
+
+			for (auto& p : m_key)
+			{
+				out << p.x 
+					<< " " << p.y
+					<< " " << p.ftime
+					<< " " << std::endl;
+			}
+
+			m_gamestate = state::Normal;
+			m_time = 0.0f;
+		}
+		break;
+	}
+
+
 }
 
 void CGameFrameWork::Key_Event(UINT iMessage, WPARAM wParam)
@@ -103,11 +142,21 @@ void CGameFrameWork::Mouse_Event(UINT iMessage, WPARAM wParam, LPARAM lParam)
 
 	case WM_LBUTTONUP:
 	{
+		// 연주중이면 못하게 막기
+		if (m_gamestate == state::PlayRecord) break;
+
 		POINT ptmouse{ LOWORD(lParam),HIWORD(lParam) };
 		for (int i = 0; i < NUM; ++i)
 		{
 			if (PtInRect(&m_obj[i].GetObjRECT(), ptmouse))
 			{
+				// 녹음중이라면
+				if (m_gamestate == state::StartRecord)
+				{
+					Key dump(ptmouse.x, ptmouse.y, m_time);
+					m_key.emplace_back(dump);
+				}
+
 				if (m_obj[i].GetClick()) // 켜져있을때
 				{
 					snd.Stop_bgm(i);
@@ -134,13 +183,34 @@ void CGameFrameWork::Menu_Input(WPARAM wparam)
 	switch (LOWORD(wparam))
 	{
 	case ID_40001: // 불러오기
+	{
+	if (m_gamestate == state::PlayRecord) break;
 
-		break;
+	m_key.clear();
+
+	std::ifstream in("replay.txt", std::ios::binary);
+
+	int input_x, input_y{ 0 };
+	float input_ftime{ 0.0f };
+
+	while (in >> input_x >> input_y >> input_ftime)
+	{
+		m_key.emplace_back(Key(input_x, input_y, input_ftime));
+	}
+
+	for (const auto& p : m_key)
+		p.show();
+
+	break;
+	}
+
 	case ID_40003: // 불러온거 시작하기
-
+		if (m_gamestate == state::PlayRecord) break;
+		m_gamestate = state::PlayRecord;
 		break; 
-	case ID_40004: // 새로 리플레이
-
+	case ID_40004: // 새로 리플레이 만들기
+		if (m_gamestate == state::PlayRecord) break;
+		m_gamestate = state::StartRecord;
 		break;
 	}
 }
