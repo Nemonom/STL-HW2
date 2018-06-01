@@ -11,11 +11,12 @@ public:
 	int x;
 	int y;
 	float ftime;
+	bool fin;
 
 public:
 	Key() {};
-	Key(int x, int y, float ftime) : x(x), y(y), ftime(ftime) {};
-	Key(const Key& other) : x(other.x), y(other.y), ftime(other.ftime) {};
+	Key(int x, int y, float ftime) : x(x), y(y), ftime(ftime), fin(false) {};
+	Key(const Key& other) : x(other.x), y(other.y), ftime(other.ftime), fin(false) {};
 	~Key() {};
 
 	void show() const 

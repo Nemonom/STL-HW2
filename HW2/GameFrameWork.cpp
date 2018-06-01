@@ -67,9 +67,48 @@ void CGameFrameWork::Update(const float & frame_time)
 		break;
 
 	case state::PlayRecord:
+		if (m_key.empty()) break;
+		
 		m_time += frame_time;
 
-		if (m_time > frame_time * 60 * 10)
+		for (auto& p : m_key)
+		{
+			if (!p.fin && p.ftime <= m_time)
+			{
+			// 연주해랑
+				
+			POINT ptmouse{ p.x, p.y };
+			for (int i = 0; i < NUM; ++i)
+			{
+				if (PtInRect(&m_obj[i].GetObjRECT(), ptmouse))
+				{
+					// 녹음중이라면
+					if (m_gamestate == state::StartRecord)
+					{
+						Key dump(ptmouse.x, ptmouse.y, m_time);
+						m_key.emplace_back(dump);
+					}
+
+					if (m_obj[i].GetClick()) // 켜져있을때
+					{
+						snd.Stop_bgm(i);
+						m_obj[i].SetClick();
+					}
+					else // 꺼져있을때
+					{
+						snd.Play_bgm(i);
+						m_obj[i].SetClick();
+					}
+				}
+			}
+			p.fin = true;
+			break;
+			}
+			else
+				continue;
+		}		
+
+		if (m_time > frame_time * 60 * 5)
 		{
 			m_gamestate = state::Normal;
 			m_time = 0.0f;
@@ -144,7 +183,7 @@ void CGameFrameWork::Mouse_Event(UINT iMessage, WPARAM wParam, LPARAM lParam)
 	{
 		// 연주중이면 못하게 막기
 		if (m_gamestate == state::PlayRecord) break;
-
+	
 		POINT ptmouse{ LOWORD(lParam),HIWORD(lParam) };
 		for (int i = 0; i < NUM; ++i)
 		{
@@ -206,10 +245,12 @@ void CGameFrameWork::Menu_Input(WPARAM wparam)
 
 	case ID_40003: // 불러온거 시작하기
 		if (m_gamestate == state::PlayRecord) break;
+		m_time = 0;
 		m_gamestate = state::PlayRecord;
 		break; 
 	case ID_40004: // 새로 리플레이 만들기
 		if (m_gamestate == state::PlayRecord) break;
+		m_time = 0;
 		m_gamestate = state::StartRecord;
 		break;
 	}
