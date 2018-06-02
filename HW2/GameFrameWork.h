@@ -11,17 +11,18 @@ public:
 	int x;
 	int y;
 	float ftime;
+	UINT iMessage;
 	bool fin;
 
 public:
 	Key() {};
-	Key(int x, int y, float ftime) : x(x), y(y), ftime(ftime), fin(false) {};
-	Key(const Key& other) : x(other.x), y(other.y), ftime(other.ftime), fin(false) {};
+	Key(int x, int y, float ftime, UINT iMessage) : x(x), y(y), ftime(ftime), fin(false), iMessage(iMessage) {};
+	Key(const Key& other) : x(other.x), y(other.y), ftime(other.ftime), fin(false), iMessage(other.iMessage) {};
 	~Key() {};
 
 	void show() const 
 	{
-		std::cout << x << " " << y << " " << ftime << std::endl;
+		std::cout << x << " " << y << " " << ftime << " " << iMessage << std::endl;
 	}
 };
 
@@ -48,6 +49,8 @@ public:
 	bool Destroy();
 	
 	void Init();
+
+	void Put_Key(int x, int y, UINT iM);
 
 private:
 	HWND m_hWnd;

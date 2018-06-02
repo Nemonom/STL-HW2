@@ -26,18 +26,18 @@ bool CGameFrameWork::Begin(HWND hWnd, HINSTANCE hInstance)
 		m_obj.push_back(dummy);
 	}
 
-	m_obj[0].OnCreatCimg(L"button/green arrow back.png");
-	m_obj[1].OnCreatCimg(L"button/green arrow left.png");
-	m_obj[2].OnCreatCimg(L"button/green arrow right.png");
-	m_obj[3].OnCreatCimg(L"button/green arrow re.png");
-	m_obj[4].OnCreatCimg(L"button/option.png");
-	m_obj[5].OnCreatCimg(L"button/laser unit button.png");
+	m_obj[0].OnCreatCimg(L"button/1.png");
+	m_obj[1].OnCreatCimg(L"button/7.png");
+	m_obj[2].OnCreatCimg(L"button/3.png");
+	m_obj[3].OnCreatCimg(L"button/4.png");
+	m_obj[4].OnCreatCimg(L"button/5.png");
+	m_obj[5].OnCreatCimg(L"button/6.png");
 
 	int i = 0;
 	for (auto& p : m_obj)
 	{
-		p.SetObjRECT(RECT{ -15 * 2,-15 * 2,15 * 2,15 * 2 });
-		p.SetPos(Point{ 175 + i * 90,  HEIGHT/2 + 200});
+		p.SetObjRECT(RECT{ -20 * 2,-20 * 2,20 * 2,20 * 2 });
+		p.SetPos(Point{ 175 + i * 90,  HEIGHT/2 + 150});
 		i++;
 	}
 	
@@ -75,32 +75,8 @@ void CGameFrameWork::Update(const float & frame_time)
 		{
 			if (!p.fin && p.ftime <= m_time)
 			{
-			// 연주해랑
-				
-			POINT ptmouse{ p.x, p.y };
-			for (int i = 0; i < NUM; ++i)
-			{
-				if (PtInRect(&m_obj[i].GetObjRECT(), ptmouse))
-				{
-					// 녹음중이라면
-					if (m_gamestate == state::StartRecord)
-					{
-						Key dump(ptmouse.x, ptmouse.y, m_time);
-						m_key.emplace_back(dump);
-					}
-
-					if (m_obj[i].GetClick()) // 켜져있을때
-					{
-						snd.Stop_bgm(i);
-						m_obj[i].SetClick();
-					}
-					else // 꺼져있을때
-					{
-						snd.Play_bgm(i);
-						m_obj[i].SetClick();
-					}
-				}
-			}
+			// 연주해랑				
+			Put_Key(p.x, p.y, p.iMessage);
 			p.fin = true;
 			break;
 			}
@@ -108,17 +84,17 @@ void CGameFrameWork::Update(const float & frame_time)
 				continue;
 		}		
 
-		if (m_time > frame_time * 60 * 5)
+		if (m_time > frame_time * 60 * MAX_TIME)
 		{
-			m_gamestate = state::Normal;
-			m_time = 0.0f;
+			Init();
+			
 		}
 		break;
 
 	case state::StartRecord:
 		m_time += frame_time;
 
-		if (m_time > frame_time * 60 * 5)
+		if (m_time > frame_time * 60 * MAX_TIME)
 		{
 			// 파일에 저장하기
 			std::ofstream out("replay.txt", std::ios::binary);
@@ -128,11 +104,11 @@ void CGameFrameWork::Update(const float & frame_time)
 				out << p.x 
 					<< " " << p.y
 					<< " " << p.ftime
+					<< " " << p.iMessage
 					<< " " << std::endl;
 			}
 
-			m_gamestate = state::Normal;
-			m_time = 0.0f;
+			Init();
 		}
 		break;
 	}
@@ -171,45 +147,9 @@ void CGameFrameWork::Mouse_Event(UINT iMessage, WPARAM wParam, LPARAM lParam)
 	switch (iMessage)
 	{
 	case WM_MOUSEMOVE:
-	{
-		for (auto& p : m_obj)
-		{
-			p.SetMouseMove(POINT{ LOWORD(lParam),HIWORD(lParam) });
-		}
-	}	break;
-
-
 	case WM_LBUTTONUP:
-	{
-		// 연주중이면 못하게 막기
 		if (m_gamestate == state::PlayRecord) break;
-	
-		POINT ptmouse{ LOWORD(lParam),HIWORD(lParam) };
-		for (int i = 0; i < NUM; ++i)
-		{
-			if (PtInRect(&m_obj[i].GetObjRECT(), ptmouse))
-			{
-				// 녹음중이라면
-				if (m_gamestate == state::StartRecord)
-				{
-					Key dump(ptmouse.x, ptmouse.y, m_time);
-					m_key.emplace_back(dump);
-				}
-
-				if (m_obj[i].GetClick()) // 켜져있을때
-				{
-					snd.Stop_bgm(i);
-					m_obj[i].SetClick();
-				}
-				else // 꺼져있을때
-				{
-					snd.Play_bgm(i);
-					m_obj[i].SetClick();
-				}
-			}
-		}
-		
-	}
+		Put_Key(LOWORD(lParam), HIWORD(lParam), iMessage);		
 	break;
 
 	default:
@@ -231,10 +171,11 @@ void CGameFrameWork::Menu_Input(WPARAM wparam)
 
 	int input_x, input_y{ 0 };
 	float input_ftime{ 0.0f };
+	UINT input_iM;
 
-	while (in >> input_x >> input_y >> input_ftime)
+	while (in >> input_x >> input_y >> input_ftime >> input_iM)
 	{
-		m_key.emplace_back(Key(input_x, input_y, input_ftime));
+		m_key.emplace_back(Key(input_x, input_y, input_ftime, input_iM));
 	}
 
 	for (const auto& p : m_key)
@@ -245,12 +186,12 @@ void CGameFrameWork::Menu_Input(WPARAM wparam)
 
 	case ID_40003: // 불러온거 시작하기
 		if (m_gamestate == state::PlayRecord) break;
-		m_time = 0;
+		Init();
 		m_gamestate = state::PlayRecord;
 		break; 
 	case ID_40004: // 새로 리플레이 만들기
 		if (m_gamestate == state::PlayRecord) break;
-		m_time = 0;
+		Init();
 		m_gamestate = state::StartRecord;
 		break;
 	}
@@ -263,5 +204,50 @@ bool CGameFrameWork::Destroy()
 
 void CGameFrameWork::Init()
 {
-	
+	for (auto& p : m_key)
+		p.fin = false;
+
+	for (auto& p : m_obj)
+	{
+		if (p.GetClick())
+			p.SetClick();
+	}
+
+	for (int i = 0; i < NUM; ++i)
+		snd.Stop_bgm(i);
+
+	m_gamestate = state::Normal;
+	m_time = 0.0f;
+}
+
+void CGameFrameWork::Put_Key(int x, int y, UINT iM)
+{
+	POINT ptmouse{ x, y };
+	for (int i = 0; i < NUM; ++i)
+	{
+		m_obj[i].SetMouseMove(POINT{ ptmouse.x, ptmouse.y });
+		if (PtInRect(&m_obj[i].GetObjRECT(), ptmouse))
+		{
+			// 녹음중이라면
+			if (m_gamestate == state::StartRecord)
+			{
+				Key dump(ptmouse.x, ptmouse.y, m_time, iM);
+				m_key.emplace_back(dump);
+			}
+
+			if (iM == WM_LBUTTONUP)
+			{
+				if (m_obj[i].GetClick()) // 켜져있을때
+				{
+					snd.Stop_bgm(i);
+					m_obj[i].SetClick();
+				}
+				else // 꺼져있을때
+				{
+					snd.Play_bgm(i);
+					m_obj[i].SetClick();
+				}
+			}	
+		}
+	}
 }

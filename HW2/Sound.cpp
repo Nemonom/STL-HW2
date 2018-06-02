@@ -31,31 +31,31 @@ Sound_Func::~Sound_Func()
 void Sound_Func::Add_sound()
 {
 	pSystem->createStream(
-		"Sound/Back.MP3"
+		"Sound/1.mp3"
 		, FMOD_DEFAULT | FMOD_LOOP_NORMAL
 		, nullptr
 		, &pSound[0]
 	);
 	pSystem->createStream(
-		"Sound/no money.mp3"
+		"Sound/2.mp3"
 		, FMOD_DEFAULT | FMOD_LOOP_NORMAL
 		, nullptr
 		, &pSound[1]
 	);
 	pSystem->createStream(
-		"Sound/stage up.mp3"
+		"Sound/3.mp3"
 		, FMOD_DEFAULT | FMOD_LOOP_NORMAL
 		, nullptr
 		, &pSound[2]
 	);
 	pSystem->createStream(
-		"Sound/tesla sound.mp3"
+		"Sound/4.mp3"
 		, FMOD_DEFAULT | FMOD_LOOP_NORMAL
 		, nullptr
 		, &pSound[3]
 	);
 	pSystem->createStream(
-		"Sound/VIOLA_SKILL1.mp3"
+		"Sound/6.mp3"
 		, FMOD_DEFAULT | FMOD_LOOP_NORMAL
 		, nullptr
 		, &pSound[4]
