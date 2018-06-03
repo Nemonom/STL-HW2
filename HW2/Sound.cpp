@@ -73,6 +73,7 @@ void Sound_Func::Play_bgm(int type)
 {
 	pSystem->playSound(pSound[type]
 		, nullptr, false, &pChannel[type]);
+
 }
 
 void Sound_Func::Stop_bgm(int type)
