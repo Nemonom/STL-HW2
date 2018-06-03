@@ -67,11 +67,11 @@ void CGameFrameWork::Update(const float & frame_time)
 		break;
 
 	case state::PlayRecord:
-		if (m_key.empty()) break;
+		if (m_playkey.empty()) break;
 		
 		m_time += frame_time;
 
-		for (auto& p : m_key)
+		for (auto& p : m_playkey)
 		{
 			if (!p.fin && p.ftime <= m_time)
 			{
@@ -86,8 +86,7 @@ void CGameFrameWork::Update(const float & frame_time)
 
 		if (m_time > frame_time * 60 * MAX_TIME)
 		{
-			Init();
-			
+			Init();			
 		}
 		break;
 
@@ -165,7 +164,7 @@ void CGameFrameWork::Menu_Input(WPARAM wparam)
 	{
 	if (m_gamestate == state::PlayRecord) break;
 
-	m_key.clear();
+	m_playkey.clear();
 
 	std::ifstream in("replay.txt", std::ios::binary);
 
@@ -175,10 +174,10 @@ void CGameFrameWork::Menu_Input(WPARAM wparam)
 
 	while (in >> input_x >> input_y >> input_ftime >> input_iM)
 	{
-		m_key.emplace_back(Key(input_x, input_y, input_ftime, input_iM));
+		m_playkey.emplace_back(Key(input_x, input_y, input_ftime, input_iM));
 	}
 
-	for (const auto& p : m_key)
+	for (const auto& p : m_playkey)
 		p.show();
 
 	break;
@@ -204,7 +203,9 @@ bool CGameFrameWork::Destroy()
 
 void CGameFrameWork::Init()
 {
-	for (auto& p : m_key)
+	m_key.clear();
+
+	for (auto& p : m_playkey)
 		p.fin = false;
 
 	for (auto& p : m_obj)

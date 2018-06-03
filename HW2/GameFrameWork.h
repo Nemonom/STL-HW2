@@ -60,7 +60,8 @@ private:
 
 	CBitmapObject m_back;
 	std::vector<CBitmapObject> m_obj; // 누르는거
-	std::list<Key> m_key; // 연주할 데이터
+	std::list<Key> m_key; // 저장할 데이터
+	std::vector<Key> m_playkey; // 불러온 데이터
 
 	// 시간 측정
 	float m_time{ 0.0f };
